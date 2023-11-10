@@ -21,7 +21,7 @@ mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.m
 
 const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "*",
       methods: ["GET", "POST"],
     },
     'force new connection': true 
@@ -51,7 +51,7 @@ app.get('/records', cors(), async(req,res)=>{
     res.json(records);
 });
 
-app.post('/record/new', async (req,res)=>{
+app.post('/record/new', cors(), async (req,res)=>{
 
     const record = new Record({
       id: req.body.id,
