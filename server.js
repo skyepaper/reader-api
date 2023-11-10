@@ -11,13 +11,13 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('--hidden--', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
   .catch(console.error);
 
-  const User=require('./models/Record');
+  const REcord=require('./models/Record');
 
 const io = new Server(server, {
     cors: {
