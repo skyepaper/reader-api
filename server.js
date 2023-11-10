@@ -21,8 +21,7 @@ mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.m
 
 const io = new Server(server, {
     cors: {
-      origin: "*",
-      //"http://localhost:3000",
+      origin: "http://localhost:3000",
       methods: ["GET", "POST"],
     },
     'force new connection': true 
