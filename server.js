@@ -17,7 +17,7 @@ mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.m
 }).then(()=>console.log('Connected to DB'))
   .catch(console.error);
 
-  const REcord=require('./models/Record');
+  const Record=require('./models/Record');
 
 const io = new Server(server, {
     cors: {
