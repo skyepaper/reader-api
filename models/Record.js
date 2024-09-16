@@ -4,23 +4,7 @@ const Schema = mongoose.Schema;
 
 const RecordSchema = new Schema({
    
-    id:{
-        type:String,
-        default:''
-    },
-    type:{
-        type:String,
-        default:''
-    },
-    sub_type:{
-        type:String,
-        default:''
-    },
-    segment:{
-        type:String,
-        default:''
-    },
-    fragment:{
+    number:{
         type:String,
         default:''
     },
@@ -31,7 +15,7 @@ const RecordSchema = new Schema({
     code:{
         type:String,
         default:''
-    },
+    }
   
 })
 
