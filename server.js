@@ -11,39 +11,23 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('--hidden--', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
   .catch(console.error);
 
-  const Record=require('./models/Record');
+  const Record = require('./models/Record');
 
-const io = new Server(server, {
+  const io = new Server(server, {
     cors: {
       origin: "*",
+      //"http://localhost:3000",
       methods: ["GET", "POST"],
     },
     'force new connection': true 
   });
   server.listen(3002);
-
-  io.on("connection", (socket) => {
-    console.log(`User Connected: ${socket.id}`);
-  
-    socket.on('disconnect', function () {
-      console.log(`User DisConnected: ${socket.id}`);
-  });
-    
-    const RecordEventEmitter = Record.watch();
-    RecordEventEmitter.on('change', change => {
-      let text='record';
-        socket.emit('message',{text});
-    });
-
-    
-  });
-
 
 app.get('/records', cors(), async(req,res)=>{  
 
@@ -51,17 +35,29 @@ app.get('/records', cors(), async(req,res)=>{
     res.json(records);
 });
 
-app.post('/record/new', cors(), async (req,res)=>{
+app.post('/record/new', async (req,res)=>{
 
     const record = new Record({
-      id: req.body.id,
-      type: req.body.type,
-      sub_type: req.body.sub_type,
-      segment: req.body.segment,
-      fragment: req.body.fragment,
-      description: req.body.description,
-      code: req.body.code,
+     
+      number: req.body.number
     });
+    record.save();
+    res.json(record);
+});
+
+app.delete('/record/delete/:id', async (req,res)=>{
+  const result=await Record.findByIdAndDelete(req.params.id);
+  res.json(result);
+})
+
+app.put('/record/save/:id', async (req,res)=>{
+
+  const record=await Record.findByIdAndUpdate(req.params.id);
+  if(record) {
+    record.description= req.body.description;
+    record.code= req.body.code;
+  }
+  
     record.save();
     res.json(record);
 });
