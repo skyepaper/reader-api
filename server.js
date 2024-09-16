@@ -11,7 +11,7 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('--hidden--', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
@@ -28,6 +28,26 @@ mongoose.connect('--hidden--', {
     'force new connection': true 
   });
   server.listen(3002);
+
+
+  io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`);
+  
+    socket.on('disconnect', function () {
+      console.log(`User DisConnected: ${socket.id}`);
+  });
+  
+    
+    const RecordEventEmitter = Record.watch();
+    RecordEventEmitter.on('change', change => {
+      let text='record';
+        socket.emit('message',{text});
+    });
+    
+  });
+
+
+
 
 app.get('/records', cors(), async(req,res)=>{  
 
@@ -61,3 +81,4 @@ app.put('/record/save/:id', async (req,res)=>{
     record.save();
     res.json(record);
 });
+
