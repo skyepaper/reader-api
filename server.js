@@ -11,13 +11,14 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('--hidden--', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
   .catch(console.error);
 
   const Record = require('./models/Record');
+  const Version = require('./models/Version');
 
   const io = new Server(server, {
     cors: {
@@ -43,6 +44,12 @@ mongoose.connect('--hidden--', {
       let text='record';
         socket.emit('message',{text});
     });
+
+    const VersionEventEmitter = Version.watch();
+    VersionEventEmitter.on('change', change => {
+      let text='version';
+        socket.emit('message',{text});
+    });
     
   });
 
@@ -54,7 +61,6 @@ app.get('/records', cors(), async(req,res)=>{
     const records = await Record.find();
     res.json(records);
 });
-
 app.post('/record/new', async (req,res)=>{
 
     const record = new Record({
@@ -64,12 +70,10 @@ app.post('/record/new', async (req,res)=>{
     record.save();
     res.json(record);
 });
-
 app.delete('/record/delete/:id', async (req,res)=>{
   const result=await Record.findByIdAndDelete(req.params.id);
   res.json(result);
 })
-
 app.put('/record/save/:id', async (req,res)=>{
 
   const record=await Record.findByIdAndUpdate(req.params.id);
@@ -82,3 +86,33 @@ app.put('/record/save/:id', async (req,res)=>{
     res.json(record);
 });
 
+
+
+app.get('/versions', cors(), async(req,res)=>{  
+
+  const versions = await Version.find();
+  res.json(versions);
+});
+app.post('/version/new', async (req,res)=>{
+
+  const version = new Version({
+    version: req.body.version,
+    number: req.body.number
+  });
+  version.save();
+  res.json(version);
+});
+app.delete('/version/delete/:id', async (req,res)=>{
+const result=await Version.findByIdAndDelete(req.params.id);
+res.json(result);
+})
+app.put('/version/save/:id', async (req,res)=>{
+
+const version=await Version.findByIdAndUpdate(req.params.id);
+if(version) {
+  version.code= req.body.code;
+}
+
+  version.save();
+  res.json(version);
+});
