@@ -11,7 +11,7 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('===hidden===', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
@@ -151,7 +151,7 @@ app.delete('/template/delete/:id', async (req,res)=>{
   })
 app.put('/template/save/:id', async (req,res)=>{
 
-const template=await Temlplate.findByIdAndUpdate(req.params.id);
+const template=await Template.findByIdAndUpdate(req.params.id);
 if(template) {
   template.type= req.body.type;
   template.temp= req.body.temp;
