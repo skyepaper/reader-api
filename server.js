@@ -11,7 +11,7 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('===hidden===', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
@@ -137,7 +137,7 @@ app.get('/templates', cors(), async(req,res)=>{
   const templates = await Template.find();
   res.json(templates);
 });
-app.post('/templates/new', async (req,res)=>{
+app.post('/template/new', async (req,res)=>{
 
   const template = new Template({
     record: req.body.record,
