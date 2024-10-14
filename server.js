@@ -11,7 +11,7 @@ app.use(cors());
 
 server = require('http').createServer(app);
 
-mongoose.connect('--hiden--', {
+mongoose.connect('mongodb+srv://borismirevbm:2YacEBc3qgz4OiLJ@aquarium.6ud9dig.mongodb.net/edireader?retryWrites=true&w=majority', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }).then(()=>console.log('Connected to DB'))
@@ -21,6 +21,7 @@ mongoose.connect('--hiden--', {
   const Version = require('./models/Version');
   const Template = require('./models/Template');
   const VersionTemp = require('./models/VersionTemp');
+  const ViewPDF = require('./models/ViewPDF');
 
   const io = new Server(server, {
     cors: {
@@ -173,7 +174,7 @@ app.get('/versiontemps', cors(), async(req,res)=>{
   const versiontemps = await VersionTemp.find();
   res.json(versiontemps);
 });
-app.post('/versiontemps/new', async (req,res)=>{
+app.post('/versiontemp/new', async (req,res)=>{
 
   const versiontemp = new VersionTemp({
     record: req.body.record,
@@ -196,4 +197,21 @@ if(versiontemp) {
 
   versiontemp.save();
   res.json(versiontemp);
+});
+
+
+
+app.get('/viewpdfs', cors(), async(req,res)=>{  
+
+  const viewpdfs = await ViewPDF.find();
+  res.json(viewpdfs);
+});
+app.post('/viewpdf/new', async (req,res)=>{
+
+  const viewpdf = new ViewPDF({
+    number: req.body.number,
+    url: req.body.url
+  });
+  viewpdf.save();
+  res.json(viewpdf);
 });
